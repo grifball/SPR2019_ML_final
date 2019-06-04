@@ -1,0 +1,4 @@
+*.jsonl
+.*.swp
+ember
+*.bz2
