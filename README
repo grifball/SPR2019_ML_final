@@ -8,8 +8,8 @@ run the setup.py to install ember
 Now "preprocess" the data with this command: (split it into small chunks of training/testing)
 python3 preprocess.py
 Make sure you have numpy
-This should create two files: ./training.jsonl and ./testing.jsonl
+the preprocess script will create vectorized data files in ./data/ember
 You can now train and test the model with:
 python3 train.py
-This script simply takes each test point and checks if the first import matches a data point in the training data.
-This script will output the accuracy of the model.
+this will mmap the vectorized data from ./data/ember then quickly grab 2000 samples and train on them
+it'll then test on 1000 data points and spit out the classification (no accuracy measurement yet)
