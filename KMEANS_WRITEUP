@@ -8,4 +8,4 @@ graphed the points (based on their PCA coordinates)
 noticed that the y-axis did a better job sorting benign from malware than the x-axis did
 The result of the kmeans training usually just uses the x-axis to separate the data points
 Ran accuracy tests using only the y-axis -> 60% accuracy
-Maybe the kmeans differentiated windows from linux binaries? (further tests could show this)
+TODO: figure out what this second axis actually measures
