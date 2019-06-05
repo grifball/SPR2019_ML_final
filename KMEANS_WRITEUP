@@ -3,9 +3,13 @@ Ran the tests anyway
 using 10000 unlabeled points, 1000 positive, 1000 negative
 Used PCA to reduce the unlabeled data down to 2 dimensions
 Used kmeans to train 2 centroids on the PCA'd data
-Used resulting model to predict data (after applying same PCA to each labeled datapoint -> 50% accuracy
+Used resulting model to predict data (after applying same PCA to each labeled datapoint)
+got 50% accuracy
 graphed the points (based on their PCA coordinates)
 noticed that the y-axis did a better job sorting benign from malware than the x-axis did
 The result of the kmeans training usually just uses the x-axis to separate the data points
-Ran accuracy tests using only the y-axis -> 60% accuracy
-TODO: figure out what this second axis actually measures
+Ran accuracy tests using only the y-axis
+got 60% accuracy
+TODO:
+	figure out what the x-axis actually measures
+	maybe use a different unsupervised scheme? (or more centroids?)
