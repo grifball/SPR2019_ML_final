@@ -102,8 +102,10 @@ group0y = np.array(group0).transpose()[1]
 group1x = np.array(group1).transpose()[0]
 group1y = np.array(group1).transpose()[1]
 plt.figure()
-plt.scatter(group0x, group0y, color = 'red')
-plt.scatter(group1x, group1y, color = 'blue')
+plt.scatter(group0x, group0y, color = 'red', label='group 0')
+plt.scatter(group1x, group1y, color = 'blue', label='group 1')
+plt.title('kmeans training clusters')
+plt.legend()
 path = './kmeans_clusters.png'
 print("saving learning cluster to ", path)
 plt.savefig(path)
@@ -121,7 +123,7 @@ plt.scatter(group00x, group00y, color = 'red', marker='x', label='benign=0')
 plt.scatter(group01x, group01y, color = 'blue', marker='x', label='benign=1')
 plt.scatter(group10x, group10y, color = 'orange', marker='+', label='malware=0')
 plt.scatter(group11x, group11y, color = 'purple', marker='+', label='malware=1')
-plt.title('kmeans malware analysis, true=guessed')
+plt.title('kmeans malware prediction, true=guessed')
 plt.legend()
 path = './kmeans_guesses.png'
 print("saving guess cluster to ", path)
