@@ -5,10 +5,10 @@ oh yeah, you've gotta clone down and install ember from here:
 	https://github.com/endgameinc/ember
 follow the instructions to install. I haven't tried conda, but pip had some weird stuff with the lief requirement, I had to mess with requirements.txt
 run the setup.py to install ember
-Now "preprocess" the data with this command: (split it into small chunks of training/testing)
+Now "preprocess" the data with this command:
 python3 preprocess.py
 Make sure you have numpy
-the preprocess script will create vectorized data files in ./data/ember
+the preprocess script will create vectorized data files in ./data/ember. it's just using some functions from the ember repo.
 You can now train and test the model with:
 python3 train.py
 this will mmap the vectorized data from ./data/ember then quickly grab 2000 samples and train on them
