@@ -1,6 +1,10 @@
 to run the current ML model, you just have to download the EMBER dataset from here:
 https://pubdata.endgame.com/ember/ember_dataset.tar.bz2
-and extract it to this repo (it should extract to ./ember)
+and extract it to this repo (it should extract to ./ember, move it to ./data/ember so it doesn't collide when you clone down and install ember)
+oh yeah, you've gotta clone down and install ember from here:
+	https://github.com/endgameinc/ember
+follow the instructions to install. I haven't tried conda, but pip had some weird stuff with the lief requirement, I had to mess with requirements.txt
+run the setup.py to install ember
 Now "preprocess" the data with this command: (split it into small chunks of training/testing)
 python3 preprocess.py
 Make sure you have numpy

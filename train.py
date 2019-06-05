@@ -1,46 +1,18 @@
+import ember
+import lightgbm as lgb
 import sys
-import json
-import numpy as np
 
-# get all the training data
-trainFile = open('./training.jsonl', 'r')
-trainDatas = []
-for line in trainFile:
-    line = trainFile.readline()
-    trainData = json.loads(line)
-    trainDatas.append(trainData)
-trainDatas = np.array(trainDatas)
-
-# get all the test data
-testFile = open('./testing.jsonl', 'r')
-testDatas = []
-for line in testFile:
-    line = testFile.readline()
-    testData = json.loads(line)
-    testDatas.append(testData)
-testDatas = np.array(trainDatas)
-
-# "classify" each point in the test data (just check if their first import is the same)
-total = 0
-correct = 0
-for testData in testDatas:
-    # check if the test point has a label
-    if testData['label'] != -1:
-        total += 1
-        # check if the test point has imports
-        if len(testData['imports'].keys()) != 0:
-            # iterate through the training data and check the dll imports
-            for trainData in trainDatas:
-                # check if the training point has a label and imports
-                if trainData['label'] != -1 and len(trainData['imports'].keys()) != 0:
-                    if sorted(trainData['imports'].keys())[0] == sorted(testData['imports'].keys())[0]:
-                        # we're guessing the label of this training point because the test point had the same import
-                        guess = trainData['label']
-                        break
-            if guess == testData['label']:
-                correct += 1
-accuracy = correct/total
-
-print("correct",correct)
-print("total",total)
-print("accuracy",accuracy)
+data_dir = "./data/ember/"
+# this function mmaps the data into memory
+X_train, y_train = ember.read_vectorized_features(data_dir, subset="train")
+# seems that the data gets sorted by the label (so the end is full of label 1, start is label 0, dunno where label -1 is, but that's my job)
+# grab only 2000 points
+# filtering through all the points takes forever, you have to seek to get data quickly
+X_subset_train = X_train[0:1000] + X_train[900000-1000:900000]
+y_subset_train = y_train[0:1000] + y_train[900000-1000:900000]
+# setup the dataset from lgbm (I just c&p'd this from the ember code)
+lgbm_dataset = lgb.Dataset(X_subset_train, y_subset_train)
+# run nthe lightgbm model
+lgbm_model = lgb.train({"application": "binary"}, lgbm_dataset)
+# print out some classifications (should all be 0 cause it's the start of the data)
+print(lgbm_model.predict(X_train[1000:2000]))

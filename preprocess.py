@@ -1,8 +1,8 @@
+import ember
 
-file1 = open('./ember/train_features_5.jsonl', 'r')
-file2 = open('./ember/train_features_0.jsonl', 'r')
-trainFile = open('./training.jsonl', 'w')
-testFile = open('./testing.jsonl', 'w')
-for line in range(0,1000):
-    trainFile.write(file1.readline())
-    testFile.write(file2.readline())
+# ember hard codes the size of data.
+# it's best to just let it convert all 1.1M points. This only takes like 30 minutes
+# only have to do this once.
+# data points are stored in the data directory and are mmaped into memory when training
+ember.create_vectorized_features("./data/ember/")
+ember.create_metadata("./data/ember/")
