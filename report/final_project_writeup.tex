@@ -40,12 +40,32 @@ The authors of EMBER removed the actual binaries from this dataset.
 This protects the researchers performing the machine learning algorithms.
 If malicious binaries were included in the dataset, the researchers could potentially infect themselves while training a model.
 \par
+Another large contribution of the authors of the EMBER dataset is the labels of the binaries. Labeling binaries is difficult work, which is generally done by hand by experts. Because of this difficultly and level of skill required, a label indicating binaries as malware or benign is very valuable. This dataset contains 800K labeled features of binaries.
+\par
 In our project, we used this dataset to train different machine learning models.
 We used a Bayesian learning algorithm on the labeled data of the EMBER dataset, and a K-means algorithm on the unlabeled data.
 \section{K-Means}
-\par 
-The unlabeled data in the dataset is meant to be used for semi-unsupervised learning.
-This was out of scope for this project, but hopefully the unsupervised analysis we performed on the data is interesting enough to be a significant contribution to understanding how the EMBER dataset can be used for machine learning models.
+\par
+The unlabeled data in the dataset is meant to be used for semi-supervised learning.
+This was out of scope for this project as we did not learn about semi-supervised techniques in class.
+Hopefully the unsupervised model we performed on the data (and the model's analysis) is interesting enough to be a significant contribution to understanding how the EMBER dataset can be used for machine learning models.
+\par
+We used the k-means algorithm to do unsupervised learning. A PCA dimensionality reduction was run on the data to reduce the features from 2351 to 2. This allows us to graph the data points in 2-D space.
+The problem with running a fully unsupervised scheme rather than using a semi-supervised algorithm is that the unsupervised algorithm may find a different distinction than malicious or benign.
+The k-means ended up getting 50\% accuracy on the test data, which, because the test data was evenly split, was just as good as guessing.
+After graphing the points retrieved from PCA and categorized with k-means it seemed that the k-means algorithm had strictly split the data along the x-axis.
+After graphing the test points and their classifications, we noticed that the y-axis actually did a much better job of separating the data.
+Just using the y-axis as a classifier, and choosing a split based on the average y value of training points, we achieved an accuracy of 70\%.
+Here's an example run of the program:
+\input{kmeans_program_output}
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textheight]{kmeans_clusters}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textheight]{kmeans_guesses}
+\end{figure}
 \section{Bayesian}
 \par
 Your stuff here

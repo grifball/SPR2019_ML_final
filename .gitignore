@@ -2,3 +2,6 @@
 .*.swp
 ember
 *.bz2
+*.aux
+*.out
+*.log
