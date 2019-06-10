@@ -22,7 +22,8 @@ Robert Handy \\
 Spring 2019 \\
 CS545 - Machine Learning \\
 Teacher: Anthony Rhodes \\
-Assignment: Final Project Write-Up \\
+Assignment: Final Project Report \\
+Title: Classifying malicious and benign binaries \\
 Presented: June 10th, 2019 \\
 \par
 The EMBER dataset is a set of binaries.
@@ -40,10 +41,10 @@ The authors of EMBER removed the actual binaries from this dataset.
 This protects the researchers performing the machine learning algorithms.
 If malicious binaries were included in the dataset, the researchers could potentially infect themselves while training a model.
 \par
-Another large contribution of the authors of the EMBER dataset is the labels of the binaries. Labeling binaries is difficult work, which is generally done by hand by experts. Because of this difficultly and level of skill required, a label indicating binaries as malware or benign is very valuable. This dataset contains 800K labeled features of binaries.
+Another large contribution of the authors of the EMBER dataset is the labels of the binaries. Labeling binaries is difficult work, which is generally done by hand by experts. Because of this difficultly and level of skill required, a label indicating binaries as malware or benign is very valuable. This dataset contains 800K labeled binaries and their features.
 \par
 In our project, we used this dataset to train different machine learning models.
-We used a Bayesian learning algorithm on the labeled data of the EMBER dataset, and a K-means algorithm on the unlabeled data.
+We used a Bayesian learning algorithm on the labeled data of the EMBER dataset, and a K-means algorithm on the unlabeled data. We compare these two models in the conclusion of this report.
 \section{K-Means}
 \par
 The unlabeled data in the dataset is meant to be used for semi-supervised learning.
@@ -52,24 +53,91 @@ Hopefully the unsupervised model we performed on the data (and the model's analy
 \par
 We used the k-means algorithm to do unsupervised learning. A PCA dimensionality reduction was run on the data to reduce the features from 2351 to 2. This allows us to graph the data points in 2-D space.
 The problem with running a fully unsupervised scheme rather than using a semi-supervised algorithm is that the unsupervised algorithm may find a different distinction than malicious or benign.
-The k-means ended up getting 50\% accuracy on the test data, which, because the test data was evenly split, was just as good as guessing.
+The k-means ended up getting 50\% accuracy on the test data, which, because the test data was evenly split, was just as good as guessing. The result of the training is shown in Figure \ref{fig:kmeans_training}.
 After graphing the points retrieved from PCA and categorized with k-means it seemed that the k-means algorithm had strictly split the data along the x-axis.
-After graphing the test points and their classifications, we noticed that the y-axis actually did a much better job of separating the data.
+\par
+After graphing the test points and their classifications, we noticed that the y-axis actually did a much better job of separating the data. This is shown in Figure \ref{fig:kmeans_testing}.
 Just using the y-axis as a classifier, and choosing a split based on the average y value of training points, we achieved an accuracy of 70\%.
-Here's an example run of the program:
+An example run of the program is shown in Listing \ref{lst:prog}.
 \input{kmeans_program_output}
-\begin{figure}[H]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=.5\textheight]{kmeans_clusters}
+\caption{k-means clusters after training}
+\label{fig:kmeans_training}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=.5\textheight]{kmeans_guesses}
+\caption{k-means results after testing}
+\label{fig:kmeans_testing}
 \end{figure}
 \section{Bayesian}
 \par
-Your stuff here
+We also used a Bayes Classifier to classify the labeled data. The Bayes algorithm was originally run on all 2351 features in the dataset. Running on 5000 test data points it produced about 60\% accuracy. The confusion matrix for this data can be seen in Table \ref{tab:bayes_all_features} (with the rows representing the actual values and the columns representing the predicted values): 
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+         & Not Malware & Malware  \\
+         \hline
+        Not Malware & 1037 & 1632 \\
+        \hline
+        Malware & 324 & 2007 \\
+        \hline
+    \end{tabular}
+    \caption{Bayes All Features}
+    \label{tab:bayes_all_features}
+\end{table}
+
+In order to determine why we get such poor results for a Bayes Classifier, we delved into the features and examined the differences between each feature for the malware and not malware. Figure \ref{fig:feature_distributions} shows the distributions for four different features for both the malware and not malware data. As is obviously clear, there is a lot of overlap between these features and so it is difficult for the Bayes Classifier to determine which class a particular datapoint belonged to. In order to combat this, we removed the features with the most overlap between the two classes, leaving only about 20 features of the original 2351 that had the most separation. Running a Bayes Classifier with only these features yielded far better results, improving the accuracy to about 80\% accuracy. This improved accuracy comes from essentially eliminating all of the "noise" that was injected into the Bayes Classifier with all of the features that were not easily distinguishable between the malware and not malware classes. The confusion matrix for the reduced features can be seen in Table \ref{tab:bayes_best_features}.
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.5\textheight]{Features}
+\caption{Feature Distributions}
+\label{fig:feature_distributions}
+\end{figure}
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+         & Not Malware & Malware  \\
+         \hline
+        Not Malware & 1756 & 913 \\
+        \hline
+        Malware & 68 & 2263 \\
+        \hline
+    \end{tabular}
+    \caption{Bayes Best Features}
+    \label{tab:bayes_best_features}
+\end{table}
+
+\par
+Interestingly, the Bayes Classifier tended to produce a large number of false positives. As can be seen in Table \ref{tab:bayes_all_features} and Table \ref{tab:bayes_best_features} the majority of the incorrectly classified data falls under the false positive section. This problem was exacerbated when we applied a PCA reduction in order to try and trim the features. Using a PCA reduction to 50 dimensions resulted in an accuracy of 54\%, hardly better than just making a random guess. The confusion matrix shown in \ref{tab:bayes_pca_reduction} shows that about 80\% of the not malware data was classified as malware. This trend continued for various numbers of dimensions that it was reduced to and it was thus determined that a PCA reduction is not useful for this dataset on a Bayes Classifier.
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+         & Not Malware & Malware  \\
+         \hline
+        Not Malware & 533 & 2136 \\
+        \hline
+        Malware & 186 & 2145 \\
+        \hline
+    \end{tabular}
+    \caption{Bayes PCA Reduction - 50 Dimensions}
+    \label{tab:bayes_pca_reduction}
+\end{table}
 \section{Conclusion}
 \par
-Write this later.
+After running experiments on the EMBER dataset, we found interesting results. It seems that Bayesian learning performed much better than k-means. This can be seen by comparing their accuracy. Both strategies needed to be tweaked to perform well.
+Both strategies found dimensionality reduction to be very important. Bayesian seemed to need hand picked dimensions from the dataset, and for k-means, simple PCA performed better.
+\par
+The largest failure of the dataset is the inability of the EMBER code to reverse the vectorized features back into raw features. Because of this, we cannot extrapolate our finding to say anything about the features of malware such as byte frequency or header imports. We can test the viability of different machine learning model.
+Hopefully more models can be trained on this dataset leading to more discoveries about the nature of malware classification.
 \end{document}

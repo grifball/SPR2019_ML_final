@@ -1,33 +1,25 @@
-\begin{lstlisting}
+\begin{lstlisting}[,caption={k-means program output},label={lst:prog}]
 $ python3 kmeans/kmeans.py 10000 5000
-original # dimensions 2351
-# unlabeled 10000
-# pos 2500
-# neg 2500
+original #dimensions 2351
+#unlabeled 10000
+#pos 2500
+#neg 2500
 scaling...
 pca-ing to  2  dimensions...
-max args: - pca component vectors (out of 2351 features)
-         1473
-         509
 training (kmeans on 2 centers)...
-FOR DEBUGGING:
-         label min 0
-         label max 1
 testing...
-total 5000
-correct 2557.0
+total test set size: 5000
+#correct 2557.0
 accuracy 0.5114
 confusion_matrix
  [[2426.   74.]
  [2369.  131.]]
-totalEntropy - kmeans 0.8136407057087205
+totalEntropy: 0.8136407057087205
 
-==Classifying using minor axis in 2 dim PCA==
-meany 2.3874235921539365e-16
-totalEntropy - pca1 0.7617772608209377
-y eval (# correct,total) 3511 5000
-y eval accuracy 0.7022
-creating graphs
-saving learning cluster to  ./kmeans_clusters.png
-saving guess cluster to  ./kmeans_guesses.png
+==Classifying using y (minor) axis in 2 dim PCA==
+mean y: 2.3874235921539365e-16
+totalEntropy: 0.7617772608209377
+#correct: 3511
+#total: 5000
+accuracy: 0.7022
 \end{lstlisting}
